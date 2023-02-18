@@ -1,5 +1,5 @@
 class Failure {
   late int code;
-  late String massage;
-  Failure({required this.code, required this.massage});
+  late String message;
+  Failure({required this.code, required this.message});
 }

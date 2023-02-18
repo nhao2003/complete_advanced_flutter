@@ -37,5 +37,18 @@ class Contacts {
 class Authentication {
   Customer? customer;
   Contacts? contacts;
+
   Authentication({required this.customer, required this.contacts});
+}
+
+class DeviceInfo {
+  late String name;
+  late String identifier;
+  late String version;
+
+  DeviceInfo({
+    required this.name,
+    required this.identifier,
+    required this.version,
+  });
 }

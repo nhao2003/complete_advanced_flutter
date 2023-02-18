@@ -1,7 +1,7 @@
 //TO CONVERT RESPONSE TO NON NULLABLE OBJECT :))
 import 'package:complete_advanced_flutter/app/extensions.dart';
 import 'package:complete_advanced_flutter/data/responses/responses.dart';
-import 'package:complete_advanced_flutter/domain/model.dart';
+import 'package:complete_advanced_flutter/domain/model/model.dart';
 
 extension CustomerResponseMapper on CustomerResponse? {
   Customer toDomain() {
