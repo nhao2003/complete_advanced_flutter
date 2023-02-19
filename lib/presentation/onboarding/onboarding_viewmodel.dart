@@ -5,7 +5,7 @@ import '../../domain/model/model.dart';
 import '../resources/assets_manager.dart';
 import '../resources/strings_manager.dart';
 
-class OnboardingViewModel extends BaseViewMobel
+class OnboardingViewModel extends BaseViewModel
     with OnboardingViewModelInputs, OnboardingViewModelOutputs {
   int _currentIndex = 0;
   final StreamController _streamController = StreamController<SliderViewObject>();

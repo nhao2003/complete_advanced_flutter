@@ -7,8 +7,9 @@ import 'package:complete_advanced_flutter/data/repository/repository_impl.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../domain/usecase/login_usecase.dart';
+import '../domain/usecase/forgot_password_usecase.dart';
+import '../domain/usecase/login_use_case.dart';
+import '../presentation/forgot_password/forgot_password_viewmodel.dart';
 import '../presentation/login/login_viewmodel.dart';
 
 final GetIt instance = GetIt.instance;
@@ -55,5 +56,14 @@ initLoginModule() {
     //LoginViewModel instance
     instance.registerLazySingleton<LoginViewModel>(
         () => LoginViewModel(instance<LoginUseCase>()));
+  }
+}
+
+initForgotPasswordModule() {
+  if (!GetIt.I.isRegistered<ForgotPasswordUseCase>()) {
+    instance.registerFactory<ForgotPasswordUseCase>(
+            () => ForgotPasswordUseCase(instance<RepositoryImpl>()));
+    instance.registerFactory<ForgotPasswordViewModel>(
+            () => ForgotPasswordViewModel(instance<ForgotPasswordUseCase>()));
   }
 }

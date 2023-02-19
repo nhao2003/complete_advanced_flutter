@@ -1,21 +1,25 @@
 import 'dart:async';
-
-import 'package:complete_advanced_flutter/domain/usecase/login_usecase.dart';
+import 'package:complete_advanced_flutter/domain/usecase/login_use_case.dart';
 import 'package:complete_advanced_flutter/presentation/base/baseviewmodel.dart';
-
+import 'package:complete_advanced_flutter/presentation/common/state_render/state_render_impl.dart';
+import 'package:complete_advanced_flutter/presentation/common/state_render/state_renderer.dart';
 import '../common/freezed_data_classes.dart';
 
-class LoginViewModel extends BaseViewMobel
+class LoginViewModel extends BaseViewModel
     with LoginViewModelInputs, LoginViewModelOutputs {
-  StreamController _userNameStreamController =
-      StreamController<String>.broadcast();
-  StreamController _passwordStreamController =
-      StreamController<String>.broadcast();
   LoginObject loginObject = LoginObject("", "");
 
-  StreamController _isAllInputValidStreamController =
+  final StreamController _userNameStreamController =
+      StreamController<String>.broadcast();
+  final StreamController _passwordStreamController =
+      StreamController<String>.broadcast();
+
+  final StreamController isUserLoggedInSuccessfullyStreamController =
+      StreamController<bool>();
+
+  final StreamController _isAllInputValidStreamController =
       StreamController<void>.broadcast();
-  late LoginUseCase _loginUseCase;
+  late final LoginUseCase _loginUseCase;
 
   LoginViewModel(this._loginUseCase);
 
@@ -24,11 +28,13 @@ class LoginViewModel extends BaseViewMobel
     _userNameStreamController.close();
     _passwordStreamController.close();
     _isAllInputValidStreamController.close();
+    isUserLoggedInSuccessfullyStreamController.close();
   }
 
   @override
   void start() {
-    // TODO: implement start
+    // Views tell state renderer. Please show the content of the screen
+    inputState.add(ContentState());
   }
 
   @override
@@ -42,17 +48,23 @@ class LoginViewModel extends BaseViewMobel
 
   @override
   login() async {
-    print(loginObject);
+    inputState.add(
+        LoadingState(stateRendererType: StateRendererType.popupLoadingState));
     (await _loginUseCase.execute(LoginUseCaseInput(
             email: loginObject.userName, password: loginObject.password)))
         .fold(
             (left) => {
                   // Left => Failure
-                  print(left.message)
+                  inputState.add(ErrorState(
+                      stateRendererType: StateRendererType.popupErrorState,
+                      message: left.message))
                 },
             (right) => {
                   //Right => Success
-                  print(right.customer?.name)
+                  inputState.add(ContentState()),
+
+                  //Navigate to main screen after login
+                  isUserLoggedInSuccessfullyStreamController.sink.add(true)
                 });
   }
 
@@ -67,14 +79,14 @@ class LoginViewModel extends BaseViewMobel
   @override
   setPassword(String password) {
     inputPassword.add(password);
-    loginObject =  loginObject.copyWith(password: password);
+    loginObject = loginObject.copyWith(password: password);
     _isAllInputValidStreamController.add(null);
   }
 
   @override
   setUserName(String userName) {
     inputUserName.add(userName);
-    loginObject =   loginObject.copyWith(userName: userName);
+    loginObject = loginObject.copyWith(userName: userName);
     _isAllInputValidStreamController.add(null);
   }
 
