@@ -14,8 +14,10 @@ class LoadingState extends FlowState {
   StateRendererType stateRendererType;
   String message;
 
-  LoadingState(
-      {required this.stateRendererType, this.message = AppStrings.loading,});
+  LoadingState({
+    required this.stateRendererType,
+    this.message = AppStrings.loading,
+  });
 
   @override
   String getMessage() => message;
@@ -29,8 +31,7 @@ class ErrorState extends FlowState {
   StateRendererType stateRendererType;
   String message;
 
-  ErrorState(
-      {required this.stateRendererType, required this.message});
+  ErrorState({required this.stateRendererType, required this.message});
 
   @override
   String getMessage() => message;
@@ -61,7 +62,8 @@ class EmptyState extends FlowState {
   String getMessage() => message;
 
   @override
-  StateRendererType getStateRendererType() => StateRendererType.emptyScreenState;
+  StateRendererType getStateRendererType() =>
+      StateRendererType.emptyScreenState;
 }
 
 //SuccessState
@@ -126,6 +128,17 @@ extension FlowStateExtension on FlowState {
               message: getMessage(),
               retryActionFunction: retryActionFunction);
         }
+      case SuccessState:
+        {
+          // i should check if we are showing loading popup to remove it before showing success popup
+          dismissDialog(context);
+
+          // show popup
+          showPopup(context, StateRendererType.popupSuccess, getMessage(),
+              title: AppStrings.success);
+          // return content ui of the screen
+          return contentScreenWidget;
+        }
     }
     return contentScreenWidget;
   }
@@ -139,8 +152,9 @@ extension FlowStateExtension on FlowState {
   _isThereCurrentDialogShowing(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent != true;
 
-  showPopup(BuildContext context, StateRendererType stateRendererType,
-      String message) {
+  showPopup(
+      BuildContext context, StateRendererType stateRendererType, String message,
+      {String title = EMPTY}) {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => showDialog(
         context: context,
@@ -148,6 +162,7 @@ extension FlowStateExtension on FlowState {
           stateRenderType: stateRendererType,
           message: message,
           retryActionFunction: () {},
+          title: title,
         ),
       ),
     );

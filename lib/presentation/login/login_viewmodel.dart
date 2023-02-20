@@ -18,7 +18,7 @@ class LoginViewModel extends BaseViewModel
       StreamController<bool>();
 
   final StreamController _isAllInputValidStreamController =
-      StreamController<void>.broadcast();
+      StreamController<bool>.broadcast();
   late final LoginUseCase _loginUseCase;
 
   LoginViewModel(this._loginUseCase);
@@ -80,14 +80,18 @@ class LoginViewModel extends BaseViewModel
   setPassword(String password) {
     inputPassword.add(password);
     loginObject = loginObject.copyWith(password: password);
-    _isAllInputValidStreamController.add(null);
+    if(_isPasswordValid(password)) {
+      _isAllInputValidStreamController.add(true);
+    }
   }
 
   @override
   setUserName(String userName) {
     inputUserName.add(userName);
     loginObject = loginObject.copyWith(userName: userName);
-    _isAllInputValidStreamController.add(null);
+    if(_isUserNameValid(userName)) {
+      _isAllInputValidStreamController.add(true);
+    }
   }
 
   bool _isPasswordValid(String password) {

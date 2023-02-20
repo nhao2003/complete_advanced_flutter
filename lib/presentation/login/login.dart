@@ -18,12 +18,12 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  LoginViewModel _viewModel = instance<LoginViewModel>();
-  AppPreferences _appPreferences = instance<AppPreferences>();
-  GlobalKey _formKey = GlobalKey<FormState>();
+  final LoginViewModel _viewModel = instance<LoginViewModel>();
+  final AppPreferences _appPreferences = instance<AppPreferences>();
+  final GlobalKey _formKey = GlobalKey<FormState>();
 
   _bind() {
     _viewModel.start();
@@ -134,7 +134,7 @@ class _LoginViewState extends State<LoginView> {
                       width: double.infinity,
                       height: AppSize.s40,
                       child: ElevatedButton(
-                          onPressed: (snapShot.data ?? false)
+                          onPressed: (snapShot.data??false)
                               ? () {
                                   _viewModel.login();
                                 }
