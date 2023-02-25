@@ -240,8 +240,8 @@ class RegisterViewModel extends BaseViewModel
   }
 
   bool _validateAllInputs() {
-    return registerViewObject.profilePicture.isNotEmpty &&
-        registerViewObject.email.isNotEmpty &&
+    print(registerViewObject);
+    return registerViewObject.email.isNotEmpty &&
         registerViewObject.password.isNotEmpty &&
         registerViewObject.mobileNumber.isNotEmpty &&
         registerViewObject.userName.isNotEmpty &&

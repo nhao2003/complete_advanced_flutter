@@ -43,6 +43,11 @@ dependencies:
   get_it: ^7.2.0
   internet_connection_checker: ^1.0.0+1
   lottie: ^2.2.0
+  image_picker: ^0.8.6+3
+  easy_localization: ^3.0.1
+  country_picker: ^2.0.19
+  rxdart: ^0.27.7
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

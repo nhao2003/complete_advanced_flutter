@@ -52,3 +52,65 @@ class DeviceInfo {
     required this.version,
   });
 }
+
+class Service {
+  int id;
+  String title;
+  String image;
+
+  Service({required this.id, required this.title, required this.image});
+}
+
+class Store {
+  int id;
+  String title;
+  String image;
+
+  Store({required this.id, required this.title, required this.image});
+}
+
+class BannerAd {
+  int id;
+  String title;
+  String image;
+  String link;
+
+  BannerAd(
+      {required this.id,
+      required this.title,
+      required this.image,
+      required this.link});
+}
+
+class HomeData {
+  List<Service> services;
+  List<Store> stores;
+  List<BannerAd> banners;
+
+  HomeData(
+      {required this.services, required this.stores, required this.banners});
+}
+
+class HomeObject {
+  HomeData data;
+
+  HomeObject({required this.data});
+}
+
+class StoreDetails {
+  int id;
+  String title;
+  String image;
+  String details;
+  String services;
+  String about;
+
+  StoreDetails({
+    required this.id,
+    required this.title,
+    required this.image,
+    required this.details,
+    required this.services,
+    required this.about,
+  });
+}
