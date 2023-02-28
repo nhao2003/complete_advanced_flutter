@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:complete_advanced_flutter/presentation/base/baseviewmodel.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../domain/model/model.dart';
 import '../resources/assets_manager.dart';
 import '../resources/strings_manager.dart';
@@ -61,16 +62,16 @@ class OnboardingViewModel extends BaseViewModel
 
   List<SliderObject> _getSliderDate() => [
         SliderObject(
-            title: AppStrings.onBoardingTitle1,
-            subTitle: AppStrings.onBoardingSubTitle1,
+            title: AppStrings.onBoardingTitle1.tr(),
+            subTitle: AppStrings.onBoardingSubTitle1.tr(),
             image: ImageAssets.onboardingLogo1),
         SliderObject(
-            title: AppStrings.onBoardingTitle2,
-            subTitle: AppStrings.onBoardingSubTitle2,
+            title: AppStrings.onBoardingTitle2.tr(),
+            subTitle: AppStrings.onBoardingSubTitle2.tr(),
             image: ImageAssets.onboardingLogo2),
         SliderObject(
-            title: AppStrings.onBoardingTitle3,
-            subTitle: AppStrings.onBoardingSubTitle3,
+            title: AppStrings.onBoardingTitle3.tr(),
+            subTitle: AppStrings.onBoardingSubTitle3.tr(),
             image: ImageAssets.onboardingLogo3),
       ];
 

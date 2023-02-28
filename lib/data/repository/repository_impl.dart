@@ -11,10 +11,12 @@ import 'package:complete_advanced_flutter/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';
 
 class RepositoryImpl extends Repository {
-  late RemoteDataSource _remoteDataSource;
-  late LocalDataSourceImplementer _localDataSource;
-  late NetworkInfo _networkInfo;
-  RepositoryImpl(this._remoteDataSource,this._localDataSource, this._networkInfo);
+  late final RemoteDataSource _remoteDataSource;
+  late final LocalDataSourceImplementer _localDataSource;
+  late final NetworkInfo _networkInfo;
+
+  RepositoryImpl(
+      this._remoteDataSource, this._localDataSource, this._networkInfo);
 
   @override
   Future<Either<Failure, Authentication>> login(
@@ -76,7 +78,8 @@ class RepositoryImpl extends Repository {
   }
 
   @override
-  Future<Either<Failure, Authentication>> register(RegisterRequest registerRequest) async {
+  Future<Either<Failure, Authentication>> register(
+      RegisterRequest registerRequest) async {
     if (await _networkInfo.isConnected) {
       try {
         // its safe to call API
@@ -103,7 +106,6 @@ class RepositoryImpl extends Repository {
     }
   }
 
-
   @override
   Future<Either<Failure, HomeObject>> getHome() async {
     try {
@@ -121,7 +123,7 @@ class RepositoryImpl extends Repository {
           final response = await _remoteDataSource.getHome();
 
           if (response.status == ApiInternalStatus.success) // success
-              {
+          {
             // return data (success)
             // return right
             // save response to local data source
@@ -131,15 +133,13 @@ class RepositoryImpl extends Repository {
             print("Error when Get home data from cache");
             // return biz logic error
             // return left
-            return Left(
-                Failure(code: response.status ?? ApiInternalStatus.failure,
-                    message: response.message ??
-                        ResponseStatus.defaultError.message));
+            return Left(Failure(
+                code: response.status ?? ApiInternalStatus.failure,
+                message:
+                    response.message ?? ResponseStatus.defaultError.message));
           }
         } catch (error) {
-          return (Left(ErrorHandler
-              .handle(error)
-              .failure));
+          return (Left(ErrorHandler.handle(error).failure));
         }
       } else {
         // return connection error
@@ -148,39 +148,31 @@ class RepositoryImpl extends Repository {
     }
   }
 
-  @override
-  Future<Either<Failure, StoreDetails>> getStoreDetails() {
-    // TODO: implement getStoreDetails
-    throw UnimplementedError();
-  }
+  Future<Either<Failure, StoreDetails>> getStoreDetails() async {
+    try {
+      // get data from cache
 
-  // @override
-  // Future<Either<Failure, StoreDetails>> getStoreDetails() async {
-  //   try {
-  //     // get data from cache
-  //
-  //     final response = await _localDataSource.getStoreDetails();
-  //     return Right(response.toDomain());
-  //   } catch (cacheError) {
-  //     if (await _networkInfo.isConnected) {
-  //       try {
-  //         final response = await _remoteDataSource.getStoreDetails();
-  //         if (response.status == ApiInternalStatus.success) {
-  //           _localDataSource.saveStoreDetailsToCache(response);
-  //           return Right(response.toDomain());
-  //         } else {
-  //           return Left(Failure(
-  //               code: response.status ?? ResponseStatus.defaultError.statusCode,
-  //               message: response.message ??
-  //                   ResponseStatus.defaultError.message));
-  //         }
-  //       } catch (error) {
-  //         return Left(ErrorHandler
-  //             .handle(error)
-  //             .failure);
-  //       }
-  //     } else {
-  //       ResponseStatus.noInternetConnection.getFailure();
-  //     }
-  //   }
+      final response = await _localDataSource.getStoreDetails();
+      return Right(response.toDomain());
+    } catch (cacheError) {
+      if (await _networkInfo.isConnected) {
+        try {
+          final response = await _remoteDataSource.getStoreDetails();
+          if (response.status == ApiInternalStatus.success) {
+            _localDataSource.saveStoreDetailsToCache(response);
+            return Right(response.toDomain());
+          } else {
+            return Left(Failure(
+                code: response.status ?? ResponseStatus.defaultError.statusCode,
+                message:
+                    response.message ?? ResponseStatus.defaultError.message));
+          }
+        } catch (error) {
+          return Left(ErrorHandler.handle(error).failure);
+        }
+      } else {
+        return Left(ResponseStatus.noInternetConnection.getFailure());
+      }
+    }
   }
+}
